@@ -1,0 +1,10 @@
+logging:
+  level: INFO
+  loggers:
+    com.oraclechallenge: DEBUG
+
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8000
