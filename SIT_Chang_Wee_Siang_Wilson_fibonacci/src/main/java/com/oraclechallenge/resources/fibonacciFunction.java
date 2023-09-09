@@ -3,22 +3,29 @@ package com.oraclechallenge.resources;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+import org.glassfish.jersey.*;
 
 import java.util.*;
+
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 
 
 
 class returnValue 
 {
-    private List<BigInteger> fibonacci;
-    private List<BigInteger> sorted;
-    public returnValue(){}
+    List<BigInteger> fibonacci;
+    List<BigInteger> sorted;
+    returnValue(){}
 
     public List<BigInteger> getFibList(){return this.fibonacci;}
     public List<BigInteger> getSortedList(){return this.sorted;}
@@ -36,8 +43,9 @@ class decoder
         
 }
 
+
 @Path("/fibonacci/{elements}")
-@Produces(MediaType.APPLICATION_JSON)
+
 public class fibonacciFunction{
 
 
@@ -45,7 +53,8 @@ public class fibonacciFunction{
     
     //Assumption is that the JSON is passed into the address bar via encoded
     @GET
-    public String getFibonacciSequence( @PathParam("elements") String elements  ) 
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFibonacciSequence( @PathParam("elements") String elements  ) 
     {
 
         
@@ -135,8 +144,14 @@ public class fibonacciFunction{
         returnValue newReturn = new returnValue();
         newReturn.setFib(fibonacciList);
         newReturn.setSorted(sortedFibonacciList);
-        String json = new Gson().toJson(newReturn);
-        return json;
+        //String json = new Gson().toJson(newReturn);
+       
+        return Response
+        .status(Response.Status.OK)
+        .entity(newReturn)
+        .type(MediaType.APPLICATION_JSON)
+        .build();
+
     }
 }
 

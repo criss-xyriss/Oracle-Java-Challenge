@@ -8,3 +8,4 @@ server:
   applicationConnectors:
     - type: http
       port: 8000
+
