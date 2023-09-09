@@ -1,3 +1,5 @@
-com\oraclechallenge\fibonacciConfiguration.class
 com\oraclechallenge\resources\fibonacciFunction.class
 com\oraclechallenge\fibonacciApplication.class
+com\oraclechallenge\resources\decoder.class
+com\oraclechallenge\fibonacciConfiguration.class
+com\oraclechallenge\resources\returnValue.class

@@ -3,8 +3,38 @@ package com.oraclechallenge.resources;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
 import java.util.*;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
+import com.google.gson.Gson;
+
+
+
+class returnValue 
+{
+    private List<BigInteger> fibonacci;
+    private List<BigInteger> sorted;
+    public returnValue(){}
+
+    public List<BigInteger> getFibList(){return this.fibonacci;}
+    public List<BigInteger> getSortedList(){return this.sorted;}
+    public void setFib(List<BigInteger> newList){this.fibonacci = newList;}
+    public void setSorted(List<BigInteger> newList){this.sorted = newList;}
+}
+
+class decoder
+{
+    private int elements;
+    public decoder(){}
+
+    public int getElements(){return this.elements;}
+    public void setElements(int newElement){this.elements=newElement;}
+        
+}
 
 @Path("/fibonacci/{elements}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -13,10 +43,24 @@ public class fibonacciFunction{
 
     public fibonacciFunction (){}
     
+    //Assumption is that the JSON is passed into the address bar via encoded
     @GET
-    public List<BigInteger> getFibonacciSequence( @PathParam("elements") int elements  ) 
+    public String getFibonacciSequence( @PathParam("elements") String elements  ) 
     {
 
+        
+        //Decoding the URL
+        String decodedURL = " ";
+        try
+        {
+            decodedURL = URLDecoder.decode(elements, StandardCharsets.UTF_8.name());
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            
+        }
+        decoder newDecoder = new Gson().fromJson(decodedURL, decoder.class);
+        
         //initialising two stacks that will help create the final list of sorted values, a fibonacci list, as well as a list of the final sorted values
         //BigIntegers have to be used as the scope of the challenge requires up to a input of 100, which will cause calculated values to exceed what Integer and Long are able to hold without overflowing
         Stack<BigInteger> oddStack = new Stack<BigInteger>();
@@ -26,7 +70,8 @@ public class fibonacciFunction{
 
         //initialising variables to hold the fibonacci values during loop
         BigInteger firstNumber= BigInteger.valueOf(0), secondNumber=BigInteger.valueOf(1), result;
-        int count=elements;
+
+        int count = newDecoder.getElements();
 
         //0 counts as even, for values of 1 and 2, their fibonacci values are already fixed, hence their positions 
         //in the non sorted and sorted lists are also fixed
@@ -69,10 +114,8 @@ public class fibonacciFunction{
                 firstNumber = secondNumber;
                 secondNumber = result;
             }
-
             //after calculating all fibonacci numbers, create the sorted list by first popping the even stack, then the odd stack
             //by using a stack, the popping ensures that the largest number always get popped first
-
             while( ! evenStack.isEmpty())
             {
                 BigInteger toPop = evenStack.peek();
@@ -80,7 +123,6 @@ public class fibonacciFunction{
                 evenStack.pop();
             
             }
-
             while( ! oddStack.isEmpty())
             {
                 BigInteger toPop = oddStack.peek();
@@ -89,8 +131,13 @@ public class fibonacciFunction{
             
             }
         }
-       
-        return sortedFibonacciList;
+        //Set both lists into attributes on the holding class before converting them into JSON format
+        returnValue newReturn = new returnValue();
+        newReturn.setFib(fibonacciList);
+        newReturn.setSorted(sortedFibonacciList);
+        String json = new Gson().toJson(newReturn);
+        return json;
     }
-
 }
+
+
