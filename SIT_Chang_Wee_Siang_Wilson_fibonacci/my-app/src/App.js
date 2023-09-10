@@ -5,16 +5,21 @@ export async function showResult()
 {
   var input = document.getElementById("elementsInput");
   var value = input.value;
-  const objJson = encodeURI(JSON.stringify({elements: value}));
-  console.log(objJson);
-  const response = await fetch(
-    `/fibonacci/${objJson}`
-    );
+  if(value < 1 || value > 100 || isNaN(value))
+  {
+    document.getElementById("fibonacciresult").innerHTML = "Invalid input entered. Please enter an integer between 1 and 100";
+  }
 
-  var data = await response.json();
-  console.log(data);
-
-  document.getElementById("fibonacciresult").innerHTML = data;
+  else
+  {
+    const objJson = JSON.stringify({elements: value});
+    console.log(objJson);
+    const response = await fetch(`/fibonacci`, {method: 'POST', headers: { 'Content-Type': 'application/json',} , body: objJson});
+  
+    var data = await response.json();
+    document.getElementById("fibonacciresult").innerHTML = "Result:  " +  JSON.stringify(data);
+  }
+  
 }
 
 function clear()
@@ -26,14 +31,14 @@ function ReturnResultButton()
 {
 
   return(
-    <button onClick={showResult}>Calculate Results</button>
+    <button type="submit" onClick={showResult}>Calculate Results</button>
   );
 }
 
 function ClearResultButton()
 {
   return(
-    <button onClick={clear}>Clear Results</button>
+    <button onClick={clear}>Clear</button>
   )
 }
 
@@ -41,12 +46,20 @@ function ClearResultButton()
 function App() {
   return (
     <div>
-    <h1>Fibonacci Calculator</h1> 
-    <label>No. of Elements: </label><input id="elementsInput" placeholder={"Number of elements"}></input> &nbsp;
-    <ReturnResultButton /> &nbsp; <ClearResultButton/>
-    <p id="fibonacciresult"> </p>
+      <div class="row">
+        <h1>Fibonacci Calculator</h1> 
+        <h2>Please enter the number of elements, between 1 and 100</h2>
+        <label>No. of Elements: </label>
+        <input id="elementsInput" placeholder={"Number of elements"} ></input> &nbsp;
+        <ReturnResultButton /> <ClearResultButton/>
+      </div>
+
+      <div class="row">
+        <p id="fibonacciresult"></p>
+      </div>
     
   </div>
+  
   );
 }
 
