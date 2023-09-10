@@ -3,8 +3,10 @@ import './App.css';
 
 export async function showResult()
 {
+
   var input = document.getElementById("elementsInput");
   var value = input.value;
+  //if the input is invalid or number is lower/larger than the given range, instead of calling the api, show an error message
   if(value < 1 || value > 100 || isNaN(value))
   {
     document.getElementById("fibonacciresult").innerHTML = "Invalid input entered. Please enter an integer between 1 and 100";

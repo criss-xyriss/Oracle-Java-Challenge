@@ -120,7 +120,8 @@ public class fibonacciFunction{
         newReturn.setSorted(sortedFibonacciList);
 
         String gson = new Gson().toJson(newReturn);
-       
+
+        //return the response as a json with both the lists
         return Response
         .status(Response.Status.OK)
         .entity(gson)
