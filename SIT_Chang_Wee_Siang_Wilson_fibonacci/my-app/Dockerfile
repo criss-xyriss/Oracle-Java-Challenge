@@ -7,7 +7,7 @@ EXPOSE 3000 4000 80
 COPY package*.json ./
 COPY . .
 
-
+RUN npm install
 RUN npm run build
 
 CMD [ "npm", "start"]
