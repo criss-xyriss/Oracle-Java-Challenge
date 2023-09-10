@@ -4,6 +4,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.*;
+
+import com.google.gson.Gson;
+
 import java.math.BigInteger;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,6 +37,7 @@ public class fibonacciFunction{
     //By sending raw json in Postman, the GET method would work, but in React, the environment throws an error that GET does not support body
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     //@Produces(MediaType.APPLICATION_JSON)
   //  public Response getFibonacciSequence( @PathParam("elements") String elements  ) 
     public Response getFibonacciSequence( handler handle  ) 
@@ -95,14 +99,14 @@ public class fibonacciFunction{
             }
             //after calculating all fibonacci numbers, create the sorted list by first popping the even stack, then the odd stack
             //by using a stack, the popping ensures that the largest number always get popped first
-            while( ! evenStack.isEmpty())
+            while( !evenStack.isEmpty())
             {
                 BigInteger toPop = evenStack.peek();
                 sortedFibonacciList.add(toPop);
                 evenStack.pop();
             
             }
-            while( ! oddStack.isEmpty())
+            while( !oddStack.isEmpty())
             {
                 BigInteger toPop = oddStack.peek();
                 sortedFibonacciList.add(toPop);
@@ -114,10 +118,12 @@ public class fibonacciFunction{
         returnValue newReturn = new returnValue();
         newReturn.setFib(fibonacciList);
         newReturn.setSorted(sortedFibonacciList);
+
+        String gson = new Gson().toJson(newReturn);
        
         return Response
         .status(Response.Status.OK)
-        .entity(newReturn)
+        .entity(gson)
         .type(MediaType.APPLICATION_JSON)
         .build();
 

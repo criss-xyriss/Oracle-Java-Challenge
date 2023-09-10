@@ -14,8 +14,7 @@ export async function showResult()
   {
     const objJson = JSON.stringify({elements: value});
     console.log(objJson);
-    const response = await fetch(`/fibonacci`, {method: 'POST', headers: { 'Content-Type': 'application/json',} , body: objJson});
-  
+    const response = await fetch('/fibonacci', {method: 'POST', headers: { 'Content-Type': 'application/json', } , body: objJson});
     var data = await response.json();
     document.getElementById("fibonacciresult").innerHTML = "Result:  " +  JSON.stringify(data);
   }

@@ -1,0 +1,23 @@
+version: '3.2'
+
+services:
+  frontend:
+    image: fibonaccifrontend
+    container_name: 'fibonaccifrontend'
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network  # Connect to the custom network
+
+  backend:
+    image: fibonaccibackend
+    container_name: 'fibonaccibackend'
+    ports:
+      - "8000:8000"
+    networks:
+    - my-network  # Connect to the custom network
+
+networks:
+  my-network:
+    driver: bridge
+  
